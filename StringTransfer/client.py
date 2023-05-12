@@ -15,4 +15,5 @@ while True:
     answer = client.recv(1024)
     print("Answer is "+answer.decode())
     print("Type 'Over' to terminate")
+
 client.close()

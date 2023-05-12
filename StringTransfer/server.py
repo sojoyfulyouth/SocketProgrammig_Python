@@ -20,11 +20,12 @@ while True:
         print("Connection is Over")
         break
     print("Equation is received")
-    ascii_values = []
-    for character in msg:
-        ascii_values.append(ord(character))
+
+    ascii_values = [ord(character) for character in msg]
+    ascii_str = [str(n) for n in ascii_values]
 
     print("Send the result to client")
-    for c in ascii_values:
-        clientConnection.send(str(c).encode())
+    for c in ascii_str:
+        clientConnection.send(c.encode())
+
 clientConnection.close()
