@@ -7,13 +7,13 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 client.connect((SERVER, PORT))
 while True:
-    print("Example : 4+5")
+    print("Example : 4 + 5")
     inp = input("Enter the operation in the form oprenad oparator oprenad : ")
     if inp == "Over":
         break
     client.send(inp.encode())
 
     answer = client.recv(1024)
-    print(f"Answer is {answer.decode}")
+    print("Answer is "+answer.decode())
     print("Type 'Over' to terminate")
 client.close()
