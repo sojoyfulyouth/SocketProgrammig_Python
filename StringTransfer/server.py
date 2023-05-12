@@ -25,6 +25,6 @@ while True:
         ascii_values.append(ord(character))
 
     print("Send the result to client")
-    output = ascii_values
-    clientConnection.send(output.encode())
+    for c in ascii_values:
+        clientConnection.send(c.encode())
 clientConnection.close()
