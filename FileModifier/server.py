@@ -1,4 +1,6 @@
 import socket
+from os.path import exists
+import sys
 
 LOCALHOST = "127.0.0.1"
 PORT = 8080
@@ -13,18 +15,24 @@ clientConnection, clientAddress = server.accept()
 print("Connected client: ", clientAddress)
 msg = ''
 
-while True:
-    data = clientConnection.recv(1024)
-    msg = data.decode()
-    if msg == 'Over':
-        print("Connection is Over")
-        break
-    print("Equation is received")
+filename = clientConnection.recv(1024)
+print("Equation is received")
+data_transferred=0
 
-    ascii_values = [ord(character) for character in msg]
-    ascii_str = str(ascii_values)
+if not exists(filename):
+    print("no file")
+    sys.exit()
 
-    print("Send the result to client")
-    clientConnection.send(ascii_str.encode())
+print(f"sending file: {filename}")
+with open(filename, 'rb') as f:
+    try:
+        data=f.read(1024)
+        while data:
+            data_transferred += clientConnection.send(data)
+            data = f.read(1024)
+    except Exception as ex:
+        print(ex)
+print(f"Sending Completed: {filename}\n Data capacity: {data_transferred}")
+
 
 clientConnection.close()
