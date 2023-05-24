@@ -11,13 +11,20 @@ client.connect((SERVER, PORT))
 fullname = input(
     "Enter file's name (R+filename: read file, W+filename+\"content\": append \"content\" to file): ")
 
+client.send(fullname.encode())
+
 rORw = fullname[0]
-filename = fullname[1:]
-# if rORw == "W":
-#     contentIdx1 = fullname.find('"')
-#     contentIdx2=fullname.find('"', contentIdx1+1)
-#     filename = fullname[1:contentIdx1]
-#     content=fullname[contentIdx1+1:contentIdx2]
+if rORw=="R":
+    filename = fullname[1:]
+elif rORw == "W":
+    contentIdx1 = fullname.find('"')
+    contentIdx2=fullname.find('"', contentIdx1+1)
+    filename = fullname[1:contentIdx1]
+    content=fullname[contentIdx1+1:contentIdx2]
+else:
+    errormsg="Write a character before the file's name"
+    print(errormsg)
+    sys.exit()
 
 
 data = client.recv(1024)
@@ -36,13 +43,11 @@ if rORw == "R":
                 print(data.decode())
                 data = client.recv(1024)
         except Exception as ex:
-            print(ex)
+                print(ex)
 elif rORw == "W":
-    with open(filename, "wb") as f:
+    with open(filename, "r") as f:
         try:
             while data:
-                f.write(content)
-                data+=content
                 data_transferred += len(data)
                 print(data.decode())
                 data = client.recv(1024)

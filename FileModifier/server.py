@@ -27,8 +27,6 @@ elif rORw == "W":
     filename = fullname[1:contentIdx1]
     content=fullname[contentIdx1+1:contentIdx2]
 else:
-    errormsg="Write a character before the file's name"
-    clientConnection.send(errormsg.encode())
     sys.exit()
     
 
@@ -50,14 +48,13 @@ if rORw == "R":
         except Exception as ex:
             print(ex)
 elif rORw == "W":
-    with open(filename, 'a') as f:
+    with open(filename, 'r+') as f:
         try:
             data = f.read(1024)
-            while data:
-                f.write(content)
-                data+=content
-                data_transferred += clientConnection.send(str(data).encode())
-                data = f.read(1024)
+            f.write(content)
+            data+=content
+            data_transferred += clientConnection.send(str(data).encode())
+            data = f.read(1024)
         except Exception as ex:
             print(ex)
 print(f"Sending Completed: {filename}\n Data capacity: {data_transferred}")
