@@ -10,9 +10,14 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((SERVER, PORT))
 fullname = input(
     "Enter file's name (R+filename: read file, W+filename+\"content\": append \"content\" to file): ")
-contentIdx = fullname.find('"')
+
 rORw = fullname[0]
-filename = fullname[1:contentIdx]
+filename = fullname[1:]
+# if rORw == "W":
+#     contentIdx1 = fullname.find('"')
+#     contentIdx2=fullname.find('"', contentIdx1+1)
+#     filename = fullname[1:contentIdx1]
+#     content=fullname[contentIdx1+1:contentIdx2]
 
 
 data = client.recv(1024)
@@ -30,14 +35,14 @@ if rORw == "R":
                 data_transferred += len(data)
                 print(data.decode())
                 data = client.recv(1024)
-                # f.write(data.decode())
         except Exception as ex:
             print(ex)
 elif rORw == "W":
     with open(filename, "wb") as f:
         try:
             while data:
-                f.write(data)
+                f.write(content)
+                data+=content
                 data_transferred += len(data)
                 print(data.decode())
                 data = client.recv(1024)
