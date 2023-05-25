@@ -14,15 +14,15 @@ fullname = input(
 client.send(fullname.encode())
 
 rORw = fullname[0]
-if rORw=="R":
+if rORw == "R":
     filename = fullname[1:]
 elif rORw == "W":
     contentIdx1 = fullname.find('"')
-    contentIdx2=fullname.find('"', contentIdx1+1)
+    contentIdx2 = fullname.find('"', contentIdx1+1)
     filename = fullname[1:contentIdx1]
-    content=fullname[contentIdx1+1:contentIdx2]
+    content = fullname[contentIdx1+1:contentIdx2]
 else:
-    errormsg="Write a character before the file's name"
+    errormsg = "Write a character before the file's name"
     print(errormsg)
     sys.exit()
 
@@ -35,24 +35,27 @@ if not data:
     sys.exit()
 
 nowdir = os.getcwd()
-if rORw == "R":
-    with open(filename, "r") as f:
-        try:
-            while data:
-                data_transferred += len(data)
-                print(data.decode())
-                data = client.recv(1024)
-        except Exception as ex:
-                print(ex)
-elif rORw == "W":
-    with open(filename, "r") as f:
-        try:
-            while data:
-                data_transferred += len(data)
-                print(data.decode())
-                data = client.recv(1024)
-        except Exception as ex:
-            print(ex)
+# if rORw == "R":
+# read  랑 write 선택 사항 상관 없이 client는 파일 내용 read만 가능?
+# content add는 파일 이름 작성과 동시에 수행 > 서버에서 content added file 전송
+# client는 그거 read
+with open(filename, "r") as f:
+    try:
+        while data:
+            data_transferred += len(data)
+            print(data.decode())
+            data = client.recv(1024)
+    except Exception as ex:
+        print(ex)
+# elif rORw == "W":
+#     with open(filename, "r") as f:
+#         try:
+#             while data:
+#                 data_transferred += len(data)
+#                 print(data.decode())
+#                 data = client.recv(1024)
+#         except Exception as ex:
+#             print(ex)
 
 print(f"Receving Completed: {filename}\n Data capacity: {data_transferred}")
 

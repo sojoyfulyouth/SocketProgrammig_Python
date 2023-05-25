@@ -19,16 +19,16 @@ fullname = clientConnection.recv(1024)
 fullname = fullname.decode()
 
 rORw = fullname[0]
-if rORw=="R":
+if rORw == "R":
     filename = fullname[1:]
 elif rORw == "W":
     contentIdx1 = fullname.find('"')
-    contentIdx2=fullname.find('"', contentIdx1+1)
+    contentIdx2 = fullname.find('"', contentIdx1+1)
     filename = fullname[1:contentIdx1]
-    content=fullname[contentIdx1+1:contentIdx2]
+    content = fullname[contentIdx1+1:contentIdx2]
 else:
     sys.exit()
-    
+
 
 print(f"filename: {filename}; Equation is received")
 data_transferred = 0
@@ -48,11 +48,12 @@ if rORw == "R":
         except Exception as ex:
             print(ex)
 elif rORw == "W":
+    # readlines 써보기
     with open(filename, 'r+') as f:
         try:
             data = f.read(1024)
             f.write(content)
-            data+=content
+            data += content
             data_transferred += clientConnection.send(str(data).encode())
             data = f.read(1024)
         except Exception as ex:
