@@ -52,7 +52,10 @@ elif rORw == "W":
     with open(filename, 'r+') as f:
         try:
             data = f.read(1024)
-            f.write(content)
+            # 기존 코드
+            # f.write(content)
+            # new line에 내용 추가
+            f.write(f"\n{content}")
             data += content
             data_transferred += clientConnection.send(str(data).encode())
             data = f.read(1024)
